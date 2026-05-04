@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A scenario-based eLearning module equipping hospital nursing staff with a repeatable process for verifying AI-generated clinical content — including full module content, sources, and SME review process.">
+  <title>Trust But Verify: AI Literacy in Clinical Settings — Vanessa Schill</title>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+
+  <style>
+    /* ── Tab Navigation ──────────────────────────────────────── */
+    .case-tabs {
+      border-bottom: 0.5px solid rgba(15, 32, 64, 0.18);
+      background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .case-tabs__inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--pad-x);
+      display: flex;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .case-tabs__inner::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--ink2);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 18px 24px 16px;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .tab-btn:hover { color: var(--ink); }
+    .tab-btn[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+    /* ── Tab Panels ──────────────────────────────────────────── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Meta Bar ────────────────────────────────────────────── */
+    .case-meta-bar { background: var(--bg); border-bottom: 0.5px solid rgba(15,32,64,0.12); }
+    .case-meta-bar__inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 28px var(--pad-x);
+      display: flex; flex-wrap: wrap; gap: 32px 48px;
+    }
+    .meta-item__label { display: block; font-size: 10px; font-weight: 500; letter-spacing: 0.12em; color: var(--ink2); text-transform: uppercase; margin-bottom: 4px; }
+    .meta-item__value { display: block; font-size: 14px; color: var(--ink); }
+
+    /* ── Shared two-column body ──────────────────────────────── */
+    .tab-body {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 72px var(--pad-x) 96px;
+      display: grid; grid-template-columns: 200px 1fr; gap: 0 80px;
+    }
+    @media (max-width: 768px) { .tab-body { grid-template-columns: 1fr; gap: 48px 0; padding-top: 48px; } }
+
+    .tab-sidebar__list { list-style: none; display: flex; flex-direction: column; position: sticky; top: 66px; }
+    .tab-sidebar__link {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.06em; color: var(--ink2);
+      text-decoration: none; text-transform: uppercase; padding: 9px 0;
+      border-bottom: 0.5px solid rgba(15,32,64,0.1); display: block;
+      transition: color 0.15s; line-height: 1.3;
+    }
+    .tab-sidebar__link:hover { color: var(--ink); }
+
+    .tab-content { max-width: 680px; }
+    .tab-section { margin-bottom: 72px; }
+    .tab-section:last-child { margin-bottom: 0; }
+
+    .sec-eyebrow { display: block; font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink2); margin-bottom: 12px; }
+    .sec-h2 { font-family: var(--serif); font-size: 28px; font-weight: 400; line-height: 1.2; color: var(--ink); margin-bottom: 24px; }
+    .sec-body p { font-size: 16px; line-height: 1.75; color: var(--ink2); margin-bottom: 20px; }
+    .sec-body p:last-child { margin-bottom: 0; }
+    .sec-body strong { color: var(--ink); font-weight: 500; }
+
+    /* Numbered reason blocks */
+    .reason-list { display: flex; flex-direction: column; }
+    .reason-item { display: grid; grid-template-columns: 32px 1fr; gap: 0 20px; padding: 24px 0; border-bottom: 0.5px solid rgba(15,32,64,0.12); }
+    .reason-item:first-child { border-top: 0.5px solid rgba(15,32,64,0.12); }
+    .reason-num { font-family: var(--serif); font-size: 22px; color: var(--accent); line-height: 1.1; padding-top: 1px; }
+    .reason-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
+    .reason-body { font-size: 15px; line-height: 1.68; color: var(--ink2); margin: 0; }
+
+    /* Workflow table */
+    .workflow-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    .workflow-table th { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink2); text-align: left; padding: 12px 16px 12px 0; border-bottom: 0.5px solid rgba(15,32,64,0.18); }
+    .workflow-table td { font-size: 14px; line-height: 1.65; color: var(--ink2); padding: 16px 16px 16px 0; border-bottom: 0.5px solid rgba(15,32,64,0.08); vertical-align: top; }
+    .workflow-table td:first-child { font-weight: 500; color: var(--ink); width: 170px; padding-right: 24px; }
+    .workflow-table em { font-style: italic; }
+
+    /* Kirkpatrick levels */
+    .level-list { display: flex; flex-direction: column; }
+    .level-item { display: grid; grid-template-columns: 96px 1fr; gap: 0 24px; padding: 20px 0; border-bottom: 0.5px solid rgba(15,32,64,0.1); align-items: start; }
+    .level-item:first-child { border-top: 0.5px solid rgba(15,32,64,0.1); }
+    .level-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink2); }
+    .level-name { font-size: 12px; font-weight: 500; color: var(--accent); display: block; margin-top: 4px; }
+    .level-body { font-size: 14px; line-height: 1.68; color: var(--ink2); margin: 0; }
+
+    /* Module overview table */
+    .module-overview { width: 100%; border-collapse: collapse; }
+    .module-overview tr { border-bottom: 0.5px solid rgba(15,32,64,0.1); }
+    .module-overview tr:first-child { border-top: 0.5px solid rgba(15,32,64,0.1); }
+    .module-overview th { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink2); text-align: left; padding: 14px 20px 14px 0; width: 150px; vertical-align: top; }
+    .module-overview td { font-size: 14px; color: var(--ink); padding: 14px 0; line-height: 1.5; }
+
+    /* Persona card */
+    .persona-card { background: var(--bg); border-left: 3px solid var(--accent); padding: 24px 28px; }
+    .persona-card__content { display: grid; grid-template-columns: 120px 1fr; gap: 0 28px; align-items: start; }
+    .persona-card__photo img { display: block; width: 120px; aspect-ratio: 1; object-fit: cover; }
+    .persona-card__body { min-width: 0; }
+    .persona-name { font-family: var(--serif); font-size: 22px; color: var(--ink); margin-bottom: 16px; }
+    .persona-row { display: grid; grid-template-columns: 140px 1fr; gap: 8px 16px; margin-bottom: 8px; font-size: 14px; line-height: 1.5; }
+    .persona-row:last-child { margin-bottom: 0; }
+    .persona-key { font-weight: 500; color: var(--ink); }
+    .persona-val { color: var(--ink2); }
+    @media (max-width: 600px) {
+      .persona-card__content { grid-template-columns: 1fr; }
+      .persona-card__photo img { width: 96px; }
+    }
+
+    /* Module copy block */
+    .module-copy { border-top: 2px solid var(--accent); background: var(--bg); padding: 20px 22px; margin-top: 16px; }
+    .module-copy + .module-copy { margin-top: 12px; }
+    .module-copy__label { font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink2); display: block; margin-bottom: 12px; }
+    .module-copy p { font-size: 14px; line-height: 1.75; color: var(--ink); margin-bottom: 14px; }
+    .module-copy p:last-child { margin-bottom: 0; }
+    .module-copy strong { font-weight: 500; }
+
+    /* Build note */
+    .build-note { border-left: 2px solid var(--bg2); padding: 10px 16px; margin-top: 14px; font-size: 13px; line-height: 1.65; color: var(--ink2); font-style: italic; }
+    .build-note strong { font-style: normal; font-weight: 500; color: var(--ink); }
+
+    /* Checklist steps */
+    .checklist-steps { display: flex; flex-direction: column; margin-top: 16px; }
+    .checklist-step { padding: 22px 0; border-bottom: 0.5px solid rgba(15,32,64,0.1); }
+    .checklist-step:first-child { border-top: 0.5px solid rgba(15,32,64,0.1); }
+    .checklist-step__header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 10px; }
+    .checklist-step__num { font-family: var(--serif); font-size: 20px; color: var(--accent); flex-shrink: 0; line-height: 1; }
+    .checklist-step__title { font-size: 15px; font-weight: 500; color: var(--ink); }
+    .checklist-step__body { font-size: 14px; line-height: 1.72; color: var(--ink2); padding-left: 36px; }
+    .checklist-step__body p { margin-bottom: 10px; }
+    .checklist-step__body p:last-child { margin-bottom: 0; }
+
+    /* Scenario */
+    .scenario-setup { background: var(--bg); padding: 22px 24px; margin-bottom: 20px; font-size: 14px; line-height: 1.75; color: var(--ink2); }
+    .scenario-setup__label { font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink2); display: block; margin-bottom: 10px; }
+    .scenario-setup p { margin-bottom: 12px; }
+    .scenario-setup p:last-child { margin-bottom: 0; }
+    .decision-prompt { font-size: 14px; font-weight: 500; font-style: italic; color: var(--ink); margin-bottom: 14px; }
+    .choice-item { margin-bottom: 10px; padding: 16px 18px; background: var(--bg); border-left: 2px solid transparent; }
+    .choice-item--correct { border-left-color: var(--accent); }
+    .choice-item--incorrect { border-left-color: rgba(90,105,120,0.25); }
+    .choice-label { font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink2); display: block; margin-bottom: 6px; }
+    .choice-item--correct .choice-label { color: var(--ink); }
+    .choice-text { font-size: 14px; color: var(--ink2); line-height: 1.6; margin-bottom: 8px; }
+    .choice-feedback { font-size: 13px; color: var(--ink2); line-height: 1.65; font-style: italic; }
+
+    /* Knowledge check */
+    .kc-question { margin-bottom: 40px; }
+    .kc-question:last-child { margin-bottom: 0; }
+    .kc-question__num { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink2); display: block; margin-bottom: 8px; }
+    .kc-question__stem { font-size: 15px; line-height: 1.65; color: var(--ink); margin-bottom: 6px; }
+    .kc-question__prompt { font-size: 13px; font-style: italic; color: var(--ink2); margin-bottom: 16px; }
+    .kc-options { display: flex; flex-direction: column; margin-bottom: 16px; }
+    .kc-option { padding: 12px 16px; font-size: 14px; line-height: 1.5; color: var(--ink2); border-bottom: 0.5px solid rgba(15,32,64,0.08); }
+    .kc-option:first-child { border-top: 0.5px solid rgba(15,32,64,0.08); }
+    .kc-option--correct { color: var(--ink); font-weight: 500; }
+    .kc-option--correct::before { content: "✓ "; color: var(--accent); }
+    .kc-option--incorrect::before { content: "○ "; opacity: 0.35; }
+
+    /* Med table */
+    .med-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+    .med-table th { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink2); text-align: left; padding: 10px 12px 10px 0; border-bottom: 0.5px solid rgba(15,32,64,0.18); }
+    .med-table td { padding: 10px 12px 10px 0; color: var(--ink2); vertical-align: top; line-height: 1.5; border-bottom: 0.5px solid rgba(15,32,64,0.08); }
+    .med-table td.flag { color: var(--ink); font-weight: 500; }
+
+    /* Takeaway list */
+    .takeaway-list { list-style: none; display: flex; flex-direction: column; }
+    .takeaway-list li { font-size: 15px; line-height: 1.68; color: var(--ink2); padding: 16px 0 16px 22px; position: relative; border-bottom: 0.5px solid rgba(15,32,64,0.08); }
+    .takeaway-list li:first-child { border-top: 0.5px solid rgba(15,32,64,0.08); }
+    .takeaway-list li::before { content: ''; position: absolute; left: 0; top: 24px; width: 6px; height: 6px; background: var(--accent); }
+    .takeaway-list strong { color: var(--ink); font-weight: 500; }
+
+    /* Sources */
+    .source-list { list-style: none; display: flex; flex-direction: column; }
+    .source-item { padding: 18px 0; border-bottom: 0.5px solid rgba(15,32,64,0.1); display: grid; grid-template-columns: 28px 1fr; gap: 0 16px; }
+    .source-item:first-child { border-top: 0.5px solid rgba(15,32,64,0.1); }
+    .source-num { font-size: 11px; font-weight: 500; color: var(--ink2); padding-top: 3px; line-height: 1; }
+    .source-body { font-size: 14px; line-height: 1.68; color: var(--ink2); }
+    .source-body a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; word-break: break-all; }
+    .source-body a:hover { color: var(--accent); }
+    .source-body em { font-style: italic; }
+
+    .source-supp-item { padding: 16px 0; border-bottom: 0.5px solid rgba(15,32,64,0.1); font-size: 14px; line-height: 1.68; color: var(--ink2); }
+    .source-supp-item:first-child { border-top: 0.5px solid rgba(15,32,64,0.1); }
+    .source-supp-item strong { color: var(--ink); font-weight: 500; display: block; margin-bottom: 2px; }
+    .source-supp-item a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; word-break: break-all; }
+    .source-supp-item a:hover { color: var(--accent); }
+
+    .source-warning { font-size: 12px; font-style: italic; color: var(--ink2); margin-top: 8px; padding: 10px 14px; background: rgba(255,204,0,0.08); border-left: 2px solid var(--accent); }
+
+    .source-note { background: var(--bg); border-left: 3px solid var(--accent); padding: 20px 22px; }
+    .source-note p { font-size: 14px; line-height: 1.72; color: var(--ink2); margin-bottom: 12px; }
+    .source-note p:last-child { margin-bottom: 0; }
+    .source-note strong { color: var(--ink); font-weight: 500; }
+
+    /* SME Review */
+    .sme-roles { display: flex; flex-direction: column; }
+    .sme-role { padding: 24px 0; border-bottom: 0.5px solid rgba(15,32,64,0.1); }
+    .sme-role:first-child { border-top: 0.5px solid rgba(15,32,64,0.1); }
+    .sme-role__title { font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 10px; }
+    .sme-role__body p { font-size: 14px; line-height: 1.72; color: var(--ink2); margin-bottom: 10px; }
+    .sme-role__body p:last-child { margin-bottom: 0; }
+
+    .sme-steps { display: flex; flex-direction: column; }
+    .sme-step { display: grid; grid-template-columns: 32px 1fr; gap: 0 20px; padding: 24px 0; border-bottom: 0.5px solid rgba(15,32,64,0.1); }
+    .sme-step:first-child { border-top: 0.5px solid rgba(15,32,64,0.1); }
+    .sme-step__num { font-family: var(--serif); font-size: 22px; color: var(--accent); line-height: 1.1; padding-top: 1px; }
+    .sme-step__title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
+    .sme-step__body p { font-size: 14px; line-height: 1.72; color: var(--ink2); margin-bottom: 10px; }
+    .sme-step__body p:last-child { margin-bottom: 0; }
+    .sme-step__body em { font-style: italic; }
+
+    .sme-callout { background: var(--bg); border-left: 3px solid var(--accent); padding: 20px 22px; }
+    .sme-callout p { font-size: 14px; line-height: 1.72; color: var(--ink2); margin-bottom: 12px; }
+    .sme-callout p:last-child { margin-bottom: 0; }
+  </style>
+</head>
+<body>
+
+  <div class="accent-bar"></div>
+
+  <header>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="/" class="nav__logo">Vanessa Schill</a>
+      <ul class="nav__links">
+        <li><a href="/work" aria-current="page">Work</a></li>
+        <li><a href="/#skills">Skills</a></li>
+        <li><a href="/articles">Articles</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+      <a href="/assets/vanessa-schill-resume.pdf" class="nav__cta" target="_blank" rel="noopener">Resume ↓</a>
+      <button class="nav__hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+    <nav class="nav__mobile-menu" aria-label="Mobile navigation">
+      <a href="/work">Work</a>
+      <a href="/#skills">Skills</a>
+      <a href="/articles">Articles</a>
+      <a href="/contact">Contact</a>
+      <a href="/assets/vanessa-schill-resume.pdf" class="nav__cta" target="_blank" rel="noopener">Resume ↓</a>
+    </nav>
+  </header>
+
+  <!-- ── Case Study Hero ── -->
+  <section class="case-hero">
+    <div class="case-hero__inner">
+      <div class="case-hero__meta">
+        <span class="case-hero__cat">eLearning · Scenario-Based · HIPAA Compliance</span>
+        <time class="case-hero__date">2025</time>
+      </div>
+      <h1 class="case-hero__title">Trust But Verify: Using AI Safely in Clinical Settings</h1>
+      <p class="case-hero__summary">Hospital nursing staff are encountering AI-generated clinical content — care summaries, medication lists, discharge documents — with little guidance on how to evaluate it before acting. This module moves learners from passive recipients to active, confident verifiers equipped with a repeatable process they can apply under real working conditions.</p>
+    </div>
+  </section>
+
+  <!-- ── Hero Image ── -->
+  <div class="case-img">
+    <img src="../../assets/proj-trust-but-verify.png"
+         alt="Trust But Verify module — stylized EHR interface showing a three-step AI content verification checklist"
+         loading="eager" width="1200" height="675">
+  </div>
+
+  <!-- ── Meta Bar ── -->
+  <div class="case-meta-bar">
+    <div class="case-meta-bar__inner">
+      <div><span class="meta-item__label">Deliverable</span><span class="meta-item__value">Scenario-Based eLearning</span></div>
+      <div><span class="meta-item__label">Platform</span><span class="meta-item__value">Articulate Rise</span></div>
+      <div><span class="meta-item__label">Duration</span><span class="meta-item__value">20–25 minutes</span></div>
+      <div><span class="meta-item__label">Audience</span><span class="meta-item__value">Hospital Nursing Staff</span></div>
+      <div><span class="meta-item__label">Compliance</span><span class="meta-item__value">HIPAA · AI Acceptable Use</span></div>
+    </div>
+  </div>
+
+  <!-- ── Tab Navigation ── -->
+  <div class="case-tabs" role="tablist" aria-label="Case study documents">
+    <div class="case-tabs__inner">
+      <button class="tab-btn" role="tab" aria-selected="true"  aria-controls="tab-case-study"     id="btn-case-study"     data-tab="case-study">Case Study</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-module-content"  id="btn-module-content"  data-tab="module-content">Module Content</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-sources"         id="btn-sources"         data-tab="sources">Sources</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-sme-review"      id="btn-sme-review"      data-tab="sme-review">SME Review</button>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- TAB 1: CASE STUDY                                          -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="tab-panel active" id="tab-case-study" role="tabpanel" aria-labelledby="btn-case-study">
+    <div class="tab-body">
+      <aside>
+        <ul class="tab-sidebar__list">
+          <li><a href="#cs-gap"         class="tab-sidebar__link">The Performance Gap</a></li>
+          <li><a href="#cs-sbl"         class="tab-sidebar__link">Why Scenario-Based</a></li>
+          <li><a href="#cs-workflow"    class="tab-sidebar__link">AI in the Workflow</a></li>
+          <li><a href="#cs-measurement" class="tab-sidebar__link">Measuring Effectiveness</a></li>
+        </ul>
+      </aside>
+      <div class="tab-content">
+
+        <section class="tab-section" id="cs-gap">
+          <span class="sec-eyebrow">Context</span>
+          <h2 class="sec-h2">The Performance Gap</h2>
+          <div class="sec-body">
+            <p>Hospital nursing staff are increasingly encountering AI-generated clinical content embedded directly into their EHR workflows: care summaries, medication lists, and discharge documents. Most have received little to no guidance on how to evaluate that content before acting on it.</p>
+            <p>The gap isn't awareness. Most nurses know AI exists. The gap is behavior: the tendency to either <strong>over-trust</strong> AI-generated content because it looks authoritative, or <strong>dismiss it entirely</strong> because it feels unfamiliar. Neither response is safe.</p>
+            <p>The performance goal was to move learners from passive recipients to active, confident verifiers, equipped with a repeatable process they could apply under real working conditions: time pressure, competing priorities, and low comfort with technology.</p>
+          </div>
+        </section>
+
+        <section class="tab-section" id="cs-sbl">
+          <span class="sec-eyebrow">Design Rationale</span>
+          <h2 class="sec-h2">Why Scenario-Based Learning</h2>
+          <div class="sec-body">
+            <p>A traditional compliance format — slides, policy language, a multiple-choice quiz — would have checked the box without changing behavior. For a learner like Maya, mandatory training delivered as a lecture is something to get through, not something to learn from.</p>
+            <p>Scenario-based learning was the right fit, though the reasons aren't as obvious.</p>
+          </div>
+          <div class="reason-list">
+            <div class="reason-item">
+              <span class="reason-num">1</span>
+              <div>
+                <p class="reason-title">The stakes are real.</p>
+                <p class="reason-body">When acting on inaccurate AI-generated content can mean patient harm or a HIPAA violation, learners need to feel the weight of that decision in a safe environment before they face it on the floor. A scenario creates that. A slide deck doesn't.</p>
+              </div>
+            </div>
+            <div class="reason-item">
+              <span class="reason-num">2</span>
+              <div>
+                <p class="reason-title">The audience is skeptical.</p>
+                <p class="reason-body">A nurse with eight years of clinical experience and low enthusiasm for mandatory training isn't going to be persuaded by policy language. She needs to see herself in the content, face a decision that feels like her actual job, and discover through her own choices why the verification process matters. That only happens through decision-based design.</p>
+              </div>
+            </div>
+            <div class="reason-item">
+              <span class="reason-num">3</span>
+              <div>
+                <p class="reason-title">Behavior change requires practice, not just exposure.</p>
+                <p class="reason-body">The verification checklist at the center of this module is only useful if learners have already practiced applying it before they need it. The scenarios provide practice in a low-stakes environment with immediate, coaching-oriented feedback. In my experience, that piece is almost always skipped in compliance training.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-section" id="cs-workflow">
+          <span class="sec-eyebrow">Process</span>
+          <h2 class="sec-h2">How AI Was Used in the Design Workflow</h2>
+          <div class="sec-body">
+            <p>AI was used deliberately, at specific stages, with human judgment applied at every decision point.</p>
+          </div>
+          <table class="workflow-table">
+            <thead><tr><th>Stage</th><th>AI's Role</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Research &amp; Content Development</td>
+                <td>Generated an initial framework of common AI-related risks in clinical settings. Reviewed, validated against current HIPAA guidance, and refined against instructional design best practices. AI didn't determine what was clinically accurate or compliant.</td>
+              </tr>
+              <tr>
+                <td>Persona &amp; Scenario Development</td>
+                <td>Generated initial drafts of the learner persona, scenario setups, and decision-point options. Each draft was evaluated for clinical realism, instructional integrity, and alignment with learning objectives before being revised.</td>
+              </tr>
+              <tr>
+                <td>Copywriting</td>
+                <td>Generated first drafts of feedback language and knowledge check questions. Rewritten to match the coaching tone the audience required and to ensure clinical accuracy.</td>
+              </tr>
+              <tr>
+                <td>What AI didn't do</td>
+                <td><em>Make instructional design decisions, determine the branching logic, validate clinical accuracy, or write the final content. Those calls were human throughout.</em></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="tab-section" id="cs-measurement">
+          <span class="sec-eyebrow">Evaluation</span>
+          <h2 class="sec-h2">How Effectiveness Would Be Measured</h2>
+          <div class="sec-body">
+            <p>Measurement would follow the Kirkpatrick Model, though the levels worth watching most closely depend on the deployment context.</p>
+          </div>
+          <div class="level-list">
+            <div class="level-item">
+              <div><span class="level-tag">Level 1</span><span class="level-name">Reaction</span></div>
+              <p class="level-body">A brief post-module survey: learner confidence in applying the verification checklist, and whether the scenarios felt relevant to actual work. For a skeptical, time-pressured audience like Maya, perceived relevance is a leading indicator of whether anything transfers.</p>
+            </div>
+            <div class="level-item">
+              <div><span class="level-tag">Level 2</span><span class="level-name">Learning</span></div>
+              <p class="level-body">Scenario accuracy scores from the two branching decision points and the knowledge check. The more useful data is which distractors learners choose most frequently — that's where the misconceptions are, and where the content may need refinement.</p>
+            </div>
+            <div class="level-item">
+              <div><span class="level-tag">Level 3</span><span class="level-name">Behavior</span></div>
+              <p class="level-body">A 30 and 90-day observation or supervisor check-in to assess whether nurses are actually applying the checklist when they encounter AI-generated content. A brief self-report survey asking learners to describe a specific situation where they applied what they learned can also uncover further revision opportunities.</p>
+            </div>
+            <div class="level-item">
+              <div><span class="level-tag">Level 4</span><span class="level-name">Results</span></div>
+              <p class="level-body">Tracked in partnership with compliance and patient safety teams: AI-related documentation errors, PHI incidents tied to AI-generated content, and help desk escalations around AI content uncertainty. A meaningful reduction across subsequent training deployments would indicate the module hit its target.</p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- TAB 2: MODULE CONTENT                                      -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-module-content" role="tabpanel" aria-labelledby="btn-module-content">
+    <div class="tab-body">
+      <aside>
+        <ul class="tab-sidebar__list">
+          <li><a href="#mc-overview"   class="tab-sidebar__link">Overview</a></li>
+          <li><a href="#mc-persona"    class="tab-sidebar__link">Learner Persona</a></li>
+          <li><a href="#mc-objectives" class="tab-sidebar__link">Objectives</a></li>
+          <li><a href="#mc-s1"         class="tab-sidebar__link">Sec 1: Intro</a></li>
+          <li><a href="#mc-s2"         class="tab-sidebar__link">Sec 2: Checklist</a></li>
+          <li><a href="#mc-s3"         class="tab-sidebar__link">Sec 3: Scenario 1</a></li>
+          <li><a href="#mc-s4"         class="tab-sidebar__link">Sec 4: Scenario 2</a></li>
+          <li><a href="#mc-s5"         class="tab-sidebar__link">Sec 5: Knowledge Check</a></li>
+          <li><a href="#mc-s6"         class="tab-sidebar__link">Sec 6: Summary</a></li>
+          <li><a href="#mc-design"     class="tab-sidebar__link">Design Notes</a></li>
+        </ul>
+      </aside>
+      <div class="tab-content">
+
+        <section class="tab-section" id="mc-overview">
+          <span class="sec-eyebrow">Module Design Document</span>
+          <h2 class="sec-h2">Trust But Verify: Using AI Safely in Clinical Settings</h2>
+          <table class="module-overview">
+            <tbody>
+              <tr><th>Format</th><td>Scenario-based eLearning (Articulate Rise)</td></tr>
+              <tr><th>Duration</th><td>20–25 minutes</td></tr>
+              <tr><th>Audience</th><td>Hospital/acute care nursing staff</td></tr>
+              <tr><th>Prerequisites</th><td>None</td></tr>
+              <tr><th>Compliance Tags</th><td>HIPAA · PHI Handling · AI Acceptable Use</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="tab-section" id="mc-persona">
+          <span class="sec-eyebrow">Learner Persona</span>
+          <h2 class="sec-h2">Registered Nurse</h2>
+          <div class="persona-card">
+            <p class="persona-name">Maya Chen, RN</p>
+            <div class="persona-card__content">
+              <div class="persona-card__photo">
+                <img src="../../assets/trust-but-verify-nurse-headshot.png" alt="Maya Chen, RN" loading="lazy">
+              </div>
+              <div class="persona-card__body">
+                <div class="persona-row"><span class="persona-key">Setting</span><span class="persona-val">Med-surg unit, mid-sized hospital</span></div>
+                <div class="persona-row"><span class="persona-key">Experience</span><span class="persona-val">8 years of nursing; solid clinical instincts, minimal enthusiasm for mandatory training</span></div>
+                <div class="persona-row"><span class="persona-key">Tech Comfort</span><span class="persona-val">Uses the EHR because she has to; prefers paper when possible</span></div>
+                <div class="persona-row"><span class="persona-key">Attitude Toward AI</span><span class="persona-val">Mildly suspicious; hasn't seen it help her yet</span></div>
+                <div class="persona-row"><span class="persona-key">Goal</span><span class="persona-val">Get through the training and get back to her patients</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-section" id="mc-objectives">
+          <span class="sec-eyebrow">Learning Objectives</span>
+          <h2 class="sec-h2">By the end of this module, learners will be able to:</h2>
+          <div class="level-list">
+            <div class="level-item" style="grid-template-columns:28px 1fr;gap:0 20px;">
+              <span style="font-family:var(--serif);font-size:20px;color:var(--accent);line-height:1.4;">1</span>
+              <p class="level-body">Identify at least three situations where AI-generated clinical content requires human verification before acting on it</p>
+            </div>
+            <div class="level-item" style="grid-template-columns:28px 1fr;gap:0 20px;">
+              <span style="font-family:var(--serif);font-size:20px;color:var(--accent);line-height:1.4;">2</span>
+              <p class="level-body">Apply a simple verification checklist to evaluate AI-generated patient information for accuracy and HIPAA compliance</p>
+            </div>
+            <div class="level-item" style="grid-template-columns:28px 1fr;gap:0 20px;">
+              <span style="font-family:var(--serif);font-size:20px;color:var(--accent);line-height:1.4;">3</span>
+              <p class="level-body">Recognize and respond appropriately to a PHI risk in an AI-generated document</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-section" id="mc-s1">
+          <span class="sec-eyebrow">Section 1 · 3–4 min</span>
+          <h2 class="sec-h2">What You Need to Know Before You Click Accept</h2>
+          <div class="module-copy">
+            <span class="module-copy__label">What AI-Generated Clinical Content Is and Where It Comes From</span>
+            <p>You may have already seen it without realizing it. A care summary that appeared in the EHR faster than usual. A discharge document that seemed almost too complete. A medication list that pulled together information from multiple visits in seconds.</p>
+            <p>That's AI-generated clinical content.</p>
+            <p>Hospitals are integrating AI tools directly into the platforms you already use — Epic, Oracle Health, Cerner, and others. These tools analyze patient data and generate summaries, recommendations, and documentation to support clinical workflows. The content looks clinical, uses the right terminology, and is formatted the way you'd expect.</p>
+            <p>That's exactly why it requires your attention.</p>
+            <p>AI generates content by identifying patterns in existing data. It is not applying clinical judgment. It doesn't know about the conversation you had with your patient this morning, or that her daughter mentioned she stopped taking one of her medications last week. That context lives with you. Not with the AI.</p>
+          </div>
+          <div class="module-copy">
+            <span class="module-copy__label">Why Hospitals Are Using It</span>
+            <p>AI-generated clinical content exists to reduce the administrative burden that pulls nurses and physicians away from direct patient care. Hospitals use it to summarize patient histories, flag potential medication interactions, generate draft discharge summaries, and surface relevant data at the point of care.</p>
+            <p>When it works well, it saves time and reduces documentation errors. When it doesn't — when it pulls from outdated records or generates a summary that looks complete but isn't — the consequences can be serious. That's where you come in.</p>
+          </div>
+          <div class="module-copy">
+            <span class="module-copy__label">Why Human Oversight Is Not Optional</span>
+            <p>AI tools are built to be helpful. They are not built to be accountable. That accountability belongs to you.</p>
+            <p>When an AI-generated document enters your workflow, it carries no clinical or legal weight until a qualified human reviews it. Your review is not a formality. It is the safeguard between a pattern-matching algorithm and your patient's safety.</p>
+            <p>HIPAA has no exception for AI. If a document contains PHI that was generated, stored, or transmitted incorrectly, the legal and ethical responsibility falls on the organization and the individuals in that workflow. That includes you.</p>
+            <p>You don't need to be a technology expert to use AI-generated content safely. You need a process. That's what this module gives you.</p>
+          </div>
+        </section>
+
+        <section class="tab-section" id="mc-s2">
+          <span class="sec-eyebrow">Section 2 · 5–6 min</span>
+          <h2 class="sec-h2">The Verification Checklist: Three Steps Before You Act</h2>
+          <div class="sec-body">
+            <p>You're busy. Your patients need you. The last thing you have time for is a complicated process that slows you down every time an AI-generated document lands in your queue.</p>
+            <p>This checklist has three steps. It takes less time than you think. And it could be the difference between a safe patient outcome and a serious clinical or compliance error. <strong>Use it every time.</strong></p>
+          </div>
+          <div class="checklist-steps">
+            <div class="checklist-step">
+              <div class="checklist-step__header">
+                <span class="checklist-step__num">1</span>
+                <span class="checklist-step__title">Is the Patient Information Accurate?</span>
+              </div>
+              <div class="checklist-step__body">
+                <p>AI tools pull from existing data. If that data is outdated, incomplete, or entered incorrectly at some point in the patient's history, the AI will reproduce those errors — confidently and in a format that looks authoritative.</p>
+                <p>Before you act on any AI-generated document, cross-reference it against the current EHR record. Look specifically for discrepancies in medications and dosages, allergies and adverse reactions, diagnoses, the active problem list, and recent lab values or test results.</p>
+                <p>If anything doesn't match, stop. Do not act on the document until the discrepancy is resolved and documented.</p>
+              </div>
+            </div>
+            <div class="checklist-step">
+              <div class="checklist-step__header">
+                <span class="checklist-step__num">2</span>
+                <span class="checklist-step__title">Is PHI Handled Correctly?</span>
+              </div>
+              <div class="checklist-step__body">
+                <p>AI tools process large amounts of patient data to generate their outputs. That creates opportunities for PHI to appear where it shouldn't — in a document intended for a different patient, sent to an unauthorized recipient, or generated using data outside approved parameters.</p>
+                <p>Before you approve or forward any AI-generated document, ask yourself: Does this document contain information that belongs to a different patient? Is it going only to authorized recipients? Does anything feel inconsistent with what I know about this patient?</p>
+                <p>If you spot a PHI concern, do not try to fix it yourself and move on. Stop, report it to your supervisor and the compliance team, and document the incident every time.</p>
+              </div>
+            </div>
+            <div class="checklist-step">
+              <div class="checklist-step__header">
+                <span class="checklist-step__num">3</span>
+                <span class="checklist-step__title">Does This Align With Your Clinical Judgment?</span>
+              </div>
+              <div class="checklist-step__body">
+                <p>This is the step no algorithm can replace.</p>
+                <p>AI summarizes patterns across data. It does not know your patient as an individual. It did not hear her describe her pain level this morning. It did not notice that she seemed more confused than yesterday, or that she mentioned she ran out of one of her prescriptions two weeks ago. You did.</p>
+                <p>Before acting on any AI-generated clinical content, ask yourself: Does this feel right? Does it align with what I know about this patient from direct observation and care? If something feels off, trust that instinct. Your clinical judgment is not a backup to the AI. It is the primary check.</p>
+              </div>
+            </div>
+          </div>
+          <div class="build-note">Rise build note: Tabbed interactive block, one tab per step, with a short real-world example for each. Build as a standalone accordion or tab block — extractable as a job aid later.</div>
+        </section>
+
+        <section class="tab-section" id="mc-s3">
+          <span class="sec-eyebrow">Section 3 · 5–6 min</span>
+          <h2 class="sec-h2">Scenario 1: The Medication Discrepancy</h2>
+          <div class="scenario-setup">
+            <span class="scenario-setup__label">Scene Setup</span>
+            <p>It's 7:15 AM. Maya is twenty minutes into her shift and already behind. She pulls up the EHR for Mr. Alderman, a 74-year-old patient admitted two days ago following a cardiac event. An AI-generated care summary is flagged at the top of his record.</p>
+            <p>She scans it quickly. Diagnoses look right. Allergies match. Then she gets to the medication list.</p>
+            <p>The AI summary lists Mr. Alderman's blood thinner — warfarin — at 7.5mg daily. But the current EHR record shows 5mg daily, updated by the attending physician at yesterday's evening rounds following an elevated INR result. The AI pulled from an earlier record. The dosage shown is outdated.</p>
+            <p>Maya has four other patients waiting. The summary looks complete and professional.</p>
+          </div>
+          <p class="decision-prompt">Decision point: What does Maya do?</p>
+          <div class="choice-item choice-item--incorrect">
+            <span class="choice-label">Choice A — Incorrect</span>
+            <p class="choice-text">The AI has access to more data than I do and is probably pulling from the most recent source. She updates the EHR to match the summary and prepares to administer the higher dose.</p>
+            <p class="choice-feedback">Administering warfarin at 7.5mg when the physician adjusted the dose to 5mg based on yesterday's INR result puts Mr. Alderman at significant risk of a bleeding event. The AI wasn't wrong based on the data it had — but it didn't know about the physician's update from last night. When AI-generated content conflicts with the current EHR record, the EHR is your source of truth until a qualified clinician tells you otherwise.</p>
+          </div>
+          <div class="choice-item choice-item--correct">
+            <span class="choice-label">Choice B — Correct</span>
+            <p class="choice-text">She flags the discrepancy, holds the medication, and contacts the attending physician before proceeding. She documents the inconsistency in the EHR.</p>
+            <p class="choice-feedback">Holding the medication, contacting the attending, and documenting the discrepancy protects Mr. Alderman, creates a clear record of clinical reasoning, and flags a data issue the AI system may repeat with other patients. You applied Step 1 of the verification checklist exactly as intended. That's what human oversight looks like in practice.</p>
+          </div>
+          <div class="choice-item choice-item--incorrect">
+            <span class="choice-label">Choice C — Incorrect</span>
+            <p class="choice-text">She ignores the AI summary entirely and goes with what's in the EHR, but doesn't document that she identified a discrepancy.</p>
+            <p class="choice-feedback">Using the correct EHR dosage protects Mr. Alderman in this moment — but failing to document the discrepancy means the issue goes unreported. The next nurse who sees that summary may not catch the same error. Documentation is not optional, even when your instinct is right.</p>
+          </div>
+        </section>
+
+        <section class="tab-section" id="mc-s4">
+          <span class="sec-eyebrow">Section 4 · 5–6 min</span>
+          <h2 class="sec-h2">Scenario 2: The PHI Risk</h2>
+          <div class="scenario-setup">
+            <span class="scenario-setup__label">Scene Setup</span>
+            <p>It's 11:30 AM. Maya is reviewing discharge paperwork for Mr. Alderman, who is being released later this afternoon. The AI has generated a discharge summary to be sent to his primary care physician.</p>
+            <p>The document looks good at first glance. Diagnoses accurate. Medications reflect the corrected warfarin dosage. Follow-up instructions clear and complete. Then she notices something in the third paragraph.</p>
+            <p>Embedded in the care narrative are lab results and a diagnosis that don't belong to Mr. Alderman. The patient in room 412 — his neighbor for the past two days — shares the same attending physician. The AI pulled from both records and combined them into a single document.</p>
+            <p>Mr. Alderman's discharge summary contains another patient's protected health information.</p>
+          </div>
+          <p class="decision-prompt">Decision point: What does Maya do?</p>
+          <div class="choice-item choice-item--incorrect">
+            <span class="choice-label">Choice A — Incorrect</span>
+            <p class="choice-text">She's already running late, and the error is small. She sends the summary as is — the PCP will probably recognize that the information doesn't belong and disregard it.</p>
+            <p class="choice-feedback">This is a HIPAA violation — and assuming the PCP will sort it out doesn't reduce that risk. Sending a document containing another patient's PHI to an unauthorized recipient is a reportable breach regardless of how small the error seems. Time pressure is never a justification for a compliance violation.</p>
+          </div>
+          <div class="choice-item choice-item--correct">
+            <span class="choice-label">Choice B — Correct</span>
+            <p class="choice-text">She stops the send, flags the document to her supervisor and the compliance team, documents the incident in the EHR, and waits for guidance before proceeding.</p>
+            <p class="choice-feedback">Stopping the send prevents the breach from becoming a disclosure. Reporting it ensures the incident is investigated and documented as required under HIPAA. Flagging it means the AI system's error gets investigated — so it doesn't happen again with a different patient and a different nurse who doesn't catch it. Your thoroughness today protects more than Mr. Alderman.</p>
+          </div>
+          <div class="choice-item choice-item--incorrect">
+            <span class="choice-label">Choice C — Incorrect</span>
+            <p class="choice-text">She manually deletes the other patient's information, confirms the rest of the summary is accurate, and sends the corrected version without reporting the incident.</p>
+            <p class="choice-feedback">This comes from the right instinct — but fixing it without reporting it is not enough. Manually correcting the document doesn't create a record of the breach, notify the compliance team as required under HIPAA, or flag the AI system error for investigation. Under HIPAA, a breach identified and corrected before disclosure still requires reporting through proper channels. Good intentions are not a substitute for the process.</p>
+          </div>
+        </section>
+
+        <section class="tab-section" id="mc-s5">
+          <span class="sec-eyebrow">Section 5 · 3–4 min</span>
+          <h2 class="sec-h2">Knowledge Check</h2>
+          <div class="sec-body" style="margin-bottom:32px;">
+            <p>Three questions applying the verification checklist to new situations, mapping directly to the learning objectives.</p>
+          </div>
+
+          <div class="kc-question">
+            <span class="kc-question__num">Question 1 — Multiple Choice</span>
+            <p class="kc-question__stem">Maya receives an AI-generated allergy list for a new admission. The list shows no known drug allergies. During her intake assessment, the patient tells Maya she had a severe reaction to penicillin two years ago that sent her to the emergency room.</p>
+            <p class="kc-question__prompt">What should Maya do first?</p>
+            <div class="kc-options">
+              <div class="kc-option kc-option--incorrect">Trust the AI-generated list — it pulls from the full medical record and is likely more complete than the patient's recall.</div>
+              <div class="kc-option kc-option--correct">Document the patient-reported allergy in the EHR immediately, flag the discrepancy, and notify the attending physician before any medications are administered.</div>
+              <div class="kc-option kc-option--incorrect">Make a note of the patient's report and plan to update the record after her other admissions are complete.</div>
+              <div class="kc-option kc-option--incorrect">Ask the patient if she's sure about the reaction before making any changes to the official record.</div>
+            </div>
+            <div class="build-note"><strong>Why B:</strong> Patient-reported information is always clinically significant, especially for allergies. If the penicillin reaction was never recorded, the AI has no way of knowing about it. A patient's direct report is primary source information. Delaying documentation while managing other admissions creates serious risk; asking for confirmation before acting introduces unnecessary delay.</div>
+          </div>
+
+          <div class="kc-question">
+            <span class="kc-question__num">Question 2 — Multiple Choice (identify what is NOT acceptable)</span>
+            <p class="kc-question__stem">A nurse on Maya's unit receives an AI-generated care summary that contains what appears to be lab results for a patient who was discharged last week. The current patient in that room has a similar name.</p>
+            <p class="kc-question__prompt">Which of the following is NOT an acceptable response?</p>
+            <div class="kc-options">
+              <div class="kc-option kc-option--incorrect">Stop and cross-reference the summary against the current patient's EHR before taking any action.</div>
+              <div class="kc-option kc-option--correct">Assume the AI pulled the correct record because the names are similar and the document looks complete.</div>
+              <div class="kc-option kc-option--incorrect">Flag the document to the supervisor and compliance team, and document the potential PHI concern before proceeding.</div>
+              <div class="kc-option kc-option--incorrect">Hold all clinical actions based on the summary until the discrepancy is resolved by a qualified clinician.</div>
+            </div>
+            <div class="build-note"><strong>Why B is the wrong answer:</strong> Similar names and a complete-looking document are not sufficient grounds to assume accuracy. AI tools can pull from incorrect records when patient names, room numbers, or identifiers are similar. Proceeding without verification puts the current patient at risk and potentially exposes a previous patient's PHI to an unauthorized workflow.</div>
+          </div>
+
+          <div class="kc-question">
+            <span class="kc-question__num">Question 3 — Scenario-Based</span>
+            <p class="kc-question__stem">Review the following AI-generated medication summary for Eleanor Voss, 68, admitted for management of Type 2 diabetes and hypertension.</p>
+            <table class="med-table">
+              <thead><tr><th>AI Summary</th><th>Current EHR</th></tr></thead>
+              <tbody>
+                <tr><td>Metformin 1000mg twice daily</td><td>Metformin 1000mg twice daily</td></tr>
+                <tr><td>Lisinopril 10mg once daily</td><td>Lisinopril 10mg once daily</td></tr>
+                <tr><td>Atorvastatin 40mg once daily</td><td>Atorvastatin 40mg once daily</td></tr>
+                <tr><td class="flag">Warfarin 5mg daily — last INR 2.4, checked 14 months ago</td><td class="flag">No warfarin on active list · No INR results</td></tr>
+              </tbody>
+            </table>
+            <p class="kc-question__prompt" style="margin-top:14px;">Which of the following best describes the appropriate next step?</p>
+            <div class="kc-options">
+              <div class="kc-option kc-option--incorrect">The AI summary and EHR mostly match — the warfarin discrepancy is minor and the INR is within therapeutic range, so it's safe to proceed.</div>
+              <div class="kc-option kc-option--correct">Flag the warfarin entry as a significant discrepancy. An anticoagulant appearing in an AI summary but not in the active medication list requires immediate clarification from the attending physician before any clinical action is taken.</div>
+              <div class="kc-option kc-option--incorrect">Add warfarin to the active medication list based on the AI summary since it appears to have a documented clinical history behind it.</div>
+              <div class="kc-option kc-option--incorrect">Disregard the AI summary entirely and rely only on the EHR going forward.</div>
+            </div>
+            <div class="build-note"><strong>Why B:</strong> A discrepancy involving an anticoagulant is never minor — warfarin has a narrow therapeutic window. The INR being checked 14 months ago makes this more concerning, not less. Never add medications to an active record based solely on an AI summary. But discarding the summary entirely is also wrong: it surfaced a potential clinical concern worth investigating.</div>
+          </div>
+        </section>
+
+        <section class="tab-section" id="mc-s6">
+          <span class="sec-eyebrow">Section 6 · 2–3 min</span>
+          <h2 class="sec-h2">Summary: What You're Taking Back to the Floor</h2>
+          <div class="module-copy">
+            <span class="module-copy__label">Closing Scene</span>
+            <p>Maya's shift is winding down. Mr. Alderman is safely discharged, his corrected warfarin dosage documented and communicated to his primary care physician. The PHI incident is reported, documented, and in the hands of the compliance team.</p>
+            <p>She ran behind today. Her patients were safe. That's the job.</p>
+          </div>
+          <div class="sec-body" style="margin-top:28px;">
+            <p>AI-generated clinical content is already part of your workflow, whether you've noticed it or not. It's designed to support you, not replace you. And it requires your review every single time — not because the technology is bad, but because no algorithm can account for what you know, what you observed, and what your patient told you this morning.</p>
+          </div>
+          <ul class="takeaway-list" style="margin-top:16px;">
+            <li><strong>AI is a tool, not a decision-maker.</strong> Every AI-generated document requires a qualified human review before it becomes part of patient care.</li>
+            <li><strong>When in doubt, report it.</strong> Fixing an error quietly is not the same as reporting it correctly. A compliance flag filed today prevents a patient safety incident tomorrow.</li>
+            <li><strong>Your instincts are an asset.</strong> Years of clinical experience, direct patient observation, and the conversation you had at the bedside this morning are things no algorithm can replicate. Use them.</li>
+          </ul>
+        </section>
+
+        <section class="tab-section" id="mc-design">
+          <span class="sec-eyebrow">Build Specifications</span>
+          <h2 class="sec-h2">Design Notes for Rise</h2>
+          <ul class="takeaway-list">
+            <li>At course end: capture learner feedback with a blank field — directed questions, open response, or both</li>
+            <li>Use Rise's scenario block for both decision points — handles branching cleanly without Storyline</li>
+            <li>Keep the visual tone calm and clinical — avoid overly bright or gamified aesthetics for this audience</li>
+            <li>Use a consistent character image for Maya throughout to build familiarity</li>
+            <li>Write all feedback in a coaching tone, not a corrective one — Maya is competent, she just needs guidance</li>
+            <li>Build the verification checklist as a standalone accordion or tab block so it can be extracted as a job aid — two portfolio artifacts from one build</li>
+          </ul>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- TAB 3: SOURCES                                             -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-sources" role="tabpanel" aria-labelledby="btn-sources">
+    <div class="tab-body">
+      <aside>
+        <ul class="tab-sidebar__list">
+          <li><a href="#src-federal" class="tab-sidebar__link">Federal Sources</a></li>
+          <li><a href="#src-supp"    class="tab-sidebar__link">Additional Sources</a></li>
+          <li><a href="#src-note"    class="tab-sidebar__link">AI Usage Note</a></li>
+        </ul>
+      </aside>
+      <div class="tab-content">
+
+        <section class="tab-section" id="src-federal">
+          <span class="sec-eyebrow">Primary Federal Sources</span>
+          <h2 class="sec-h2">U.S. Department of Health and Human Services</h2>
+          <div class="sec-body">
+            <p>All sources below are official publications from HHS and its Office for Civil Rights (OCR). URLs verified as of May 2026.</p>
+          </div>
+          <p class="source-warning">Verify all URLs remain active prior to module deployment.</p>
+          <ul class="source-list" style="margin-top:16px;">
+            <li class="source-item">
+              <span class="source-num">1</span>
+              <p class="source-body">U.S. Department of Health and Human Services, Office for Civil Rights. "The HIPAA Privacy Rule." HHS.gov. Last reviewed September 27, 2024.<br><a href="https://www.hhs.gov/hipaa/for-professionals/privacy/index.html" target="_blank" rel="noopener">hhs.gov/hipaa/for-professionals/privacy/index.html</a></p>
+            </li>
+            <li class="source-item">
+              <span class="source-num">2</span>
+              <p class="source-body">U.S. Department of Health and Human Services, Office for Civil Rights. "Summary of the HIPAA Privacy Rule." HHS.gov. Last reviewed March 14, 2025.<br><a href="https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html" target="_blank" rel="noopener">hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html</a></p>
+            </li>
+            <li class="source-item">
+              <span class="source-num">3</span>
+              <p class="source-body">U.S. Department of Health and Human Services, Office for Civil Rights. "Summary of the HIPAA Security Rule." HHS.gov. Last reviewed December 30, 2024.<br><a href="https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html" target="_blank" rel="noopener">hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html</a></p>
+            </li>
+            <li class="source-item">
+              <span class="source-num">4</span>
+              <p class="source-body">U.S. Department of Health and Human Services, Office for Civil Rights. "Breach Notification Rule." HHS.gov. Last reviewed July 26, 2013.<br><a href="https://www.hhs.gov/hipaa/for-professionals/breach-notification/index.html" target="_blank" rel="noopener">hhs.gov/hipaa/for-professionals/breach-notification/index.html</a></p>
+            </li>
+            <li class="source-item">
+              <span class="source-num">5</span>
+              <p class="source-body">U.S. Department of Health and Human Services, Office for Civil Rights. "Breach Notification Guidance." HHS.gov. Last reviewed July 26, 2013.<br><a href="https://www.hhs.gov/hipaa/for-professionals/breach-notification/guidance/index.html" target="_blank" rel="noopener">hhs.gov/hipaa/for-professionals/breach-notification/guidance/index.html</a></p>
+            </li>
+            <li class="source-item">
+              <span class="source-num">6</span>
+              <p class="source-body">U.S. Department of Health and Human Services, Office for Civil Rights. "HIPAA Security Rule NPRM to Strengthen Cybersecurity for Electronic PHI." December 27, 2024.<br><a href="https://www.hhs.gov/hipaa/for-professionals/security/hipaa-security-rule-nprm/factsheet/index.html" target="_blank" rel="noopener">hhs.gov/hipaa/for-professionals/security/hipaa-security-rule-nprm/factsheet/index.html</a></p>
+            </li>
+            <li class="source-item">
+              <span class="source-num">7</span>
+              <p class="source-body">U.S. Department of Health and Human Services, Office for Civil Rights. "Ensuring Nondiscrimination Through the Use of Artificial Intelligence and Other Emerging Technologies in Health Care." Dear Colleague Letter. January 10, 2025.<br><a href="https://www.hhs.gov/civil-rights/for-providers/laws/section-1557/index.html" target="_blank" rel="noopener">hhs.gov/civil-rights/for-providers/laws/section-1557/index.html</a></p>
+            </li>
+            <li class="source-item">
+              <span class="source-num">8</span>
+              <p class="source-body">U.S. Department of Health and Human Services, Office for Civil Rights. "Model Notices of Privacy Practices." HHS.gov. Revised February 2026.<br><a href="https://www.hhs.gov/hipaa/for-professionals/privacy/guidance/model-notices-privacy-practices/index.html" target="_blank" rel="noopener">hhs.gov/hipaa/for-professionals/privacy/guidance/model-notices-privacy-practices/index.html</a></p>
+            </li>
+            <li class="source-item">
+              <span class="source-num">9</span>
+              <p class="source-body">Office of the Federal Register, HHS. "HIPAA Security Rule to Strengthen the Cybersecurity of Electronic PHI." <em>Federal Register</em> 90, no. 4. January 6, 2025.<br><a href="https://www.federalregister.gov/documents/2025/01/06/2024-30983/hipaa-security-rule-to-strengthen-the-cybersecurity-of-electronic-protected-health-information" target="_blank" rel="noopener">federalregister.gov/documents/2025/01/06/2024-30983/…</a></p>
+            </li>
+          </ul>
+        </section>
+
+        <section class="tab-section" id="src-supp">
+          <span class="sec-eyebrow">Recommended for SME Review</span>
+          <h2 class="sec-h2">Additional Sources</h2>
+          <div class="sec-body">
+            <p>Not cited directly in the module, but recommended for SME review and further validation of clinical and technical content.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;">
+            <div class="source-supp-item"><strong>Office of the National Coordinator for Health Information Technology (ONC)</strong>Health IT topics including AI, EHR integration, and interoperability.<br><a href="https://www.healthit.gov" target="_blank" rel="noopener">healthit.gov</a></div>
+            <div class="source-supp-item"><strong>American Nurses Association (ANA)</strong>Position statements and resources on AI and nursing practice.<br><a href="https://www.nursingworld.org" target="_blank" rel="noopener">nursingworld.org</a></div>
+            <div class="source-supp-item"><strong>National Institute of Standards and Technology (NIST)</strong>AI Risk Management Framework (AI RMF 1.0).<br><a href="https://www.nist.gov/system/files/documents/2023/01/26/AI%20RMF%201.0.pdf" target="_blank" rel="noopener">nist.gov — AI RMF 1.0 (PDF)</a></div>
+            <div class="source-supp-item"><strong>The Joint Commission</strong>Standards and resources related to clinical documentation, patient safety, and healthcare technology.<br><a href="https://www.jointcommission.org" target="_blank" rel="noopener">jointcommission.org</a></div>
+          </div>
+        </section>
+
+        <section class="tab-section" id="src-note">
+          <span class="sec-eyebrow">Transparency</span>
+          <h2 class="sec-h2">Note on AI-Assisted Content Development</h2>
+          <div class="source-note">
+            <p>This module was developed with the assistance of AI tools as part of an intentional instructional design workflow. AI was used to generate initial content drafts, scenario frameworks, and feedback language. All content was reviewed, revised, and validated by the instructional designer before finalization.</p>
+            <p><strong>Clinical accuracy, compliance language, and scenario realism should be validated by qualified subject matter experts — clinical, compliance, and health IT — before live deployment.</strong> See the SME Review tab for the recommended review protocol.</p>
+            <p>This documentation reflects the instructional designer's professional commitment to accuracy, transparency, and responsible AI use in healthcare learning design.</p>
+            <p style="font-size:12px;color:var(--ink2);margin-top:4px;">Document prepared May 2026 · Trust But Verify: Using AI Safely in Clinical Settings · Vanessa Schill, ATD Master Trainer</p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- TAB 4: SME REVIEW                                          -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-sme-review" role="tabpanel" aria-labelledby="btn-sme-review">
+    <div class="tab-body">
+      <aside>
+        <ul class="tab-sidebar__list">
+          <li><a href="#sme-why"     class="tab-sidebar__link">Why SME Review</a></li>
+          <li><a href="#sme-who"     class="tab-sidebar__link">Who Should Review</a></li>
+          <li><a href="#sme-process" class="tab-sidebar__link">The Review Process</a></li>
+          <li><a href="#sme-signal"  class="tab-sidebar__link">What This Signals</a></li>
+        </ul>
+      </aside>
+      <div class="tab-content">
+
+        <section class="tab-section" id="sme-why">
+          <span class="sec-eyebrow">Case Study Addendum</span>
+          <h2 class="sec-h2">Why SME Review Matters for This Module</h2>
+          <div class="sec-body">
+            <p>AI literacy training for clinical staff touches two domains where getting it wrong has real consequences — healthcare compliance and emerging technology. Instructionally sound content that is clinically inaccurate puts learners at risk. Compliance language that is even slightly outdated exposes organizations to liability. And in acute care settings, the patients at the end of that chain are real people.</p>
+            <p>SME review was never optional here. It was a design requirement. The question is never whether healthcare content needs expert validation — it always does. The question is how to structure that process so it actually strengthens the content.</p>
+          </div>
+        </section>
+
+        <section class="tab-section" id="sme-who">
+          <span class="sec-eyebrow">Reviewer Roles</span>
+          <h2 class="sec-h2">Who Should Review This Module</h2>
+          <div class="sec-body">
+            <p>Three separate reviewers ensure the training is evaluated through three distinct lenses. None of them are interchangeable.</p>
+          </div>
+          <div class="sme-roles">
+            <div class="sme-role">
+              <p class="sme-role__title">Clinical SME</p>
+              <div class="sme-role__body">
+                <p>A registered nurse or nurse educator with current acute care experience. This person confirms whether Maya's decision points reflect what nurses actually face on a med-surg unit, whether the medication details hold up clinically, and whether the verification checklist is achievable under real working conditions — not just ideal ones.</p>
+                <p>The right candidate is someone currently working in, or closely adjacent to, a hospital environment that already uses AI-assisted documentation tools. Clinical experience that predates EHR integration is useful context, but it is not sufficient for validating this particular content.</p>
+              </div>
+            </div>
+            <div class="sme-role">
+              <p class="sme-role__title">Compliance SME</p>
+              <div class="sme-role__body">
+                <p>A HIPAA compliance officer or healthcare privacy attorney. Their job is to confirm that all PHI guidance, breach notification language, and compliance requirements are accurate and current — and to catch anything that overstates or understates legal obligations, even unintentionally. In compliance training, the difference between "must" and "should" matters.</p>
+                <p>The right candidate has current working knowledge of OCR enforcement priorities, not just familiarity with the statute. Regulations evolve. The reviewer should reflect where the guidance actually stands today.</p>
+              </div>
+            </div>
+            <div class="sme-role">
+              <p class="sme-role__title">AI and Health IT SME</p>
+              <div class="sme-role__body">
+                <p>A health informatics professional or clinical informaticist with hands-on EHR implementation experience. This reviewer validates the technical accuracy of how AI-generated content is described — how it is generated, where errors typically originate, and how it behaves in clinical workflows. They also confirm that the scenarios are technically realistic, not just plausible-sounding.</p>
+                <p>This is the reviewer most ID teams overlook. In my experience, it is often the most valuable one. A scenario can be clinically accurate and legally sound and still lose learner trust if the technology doesn't behave the way nurses actually see it behave in their EHR.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-section" id="sme-process">
+          <span class="sec-eyebrow">Process</span>
+          <h2 class="sec-h2">The SME Review Process</h2>
+          <div class="sme-steps">
+            <div class="sme-step">
+              <span class="sme-step__num">1</span>
+              <div>
+                <p class="sme-step__title">Prepare the Review Package</p>
+                <div class="sme-step__body">
+                  <p>Before reaching out to any SME, I put together a structured review package: complete module content, the design document, learning objectives, and a review guide that tells each reviewer exactly what I need from them.</p>
+                  <p>That last piece is critical. Without clear direction, a clinical SME will default to editing for tone and clarity. A compliance SME will flag language they personally prefer rather than language that creates legal risk. Each reviewer gets explicit guidance on what they are evaluating — and explicit guidance on the difference between a critical error and a suggestion for improvement.</p>
+                  <p>The review guide for this module includes a brief overview of purpose and audience, the three learning objectives, domain-specific review questions for each SME, a clear timeline and feedback format, and instructions for prioritizing feedback by severity.</p>
+                </div>
+              </div>
+            </div>
+            <div class="sme-step">
+              <span class="sme-step__num">2</span>
+              <div>
+                <p class="sme-step__title">Conduct Individual Reviews</p>
+                <div class="sme-step__body">
+                  <p>Each SME reviews their package independently before we talk. Written feedback is a useful starting point. The debrief conversation is where the real value happens.</p>
+                  <p>One question I ask every reviewer without exception: <em>Is there anything in this module that could cause harm if a learner acted on it?</em> That question focuses the conversation quickly and surfaces the concerns that matter most.</p>
+                </div>
+              </div>
+            </div>
+            <div class="sme-step">
+              <span class="sme-step__num">3</span>
+              <div>
+                <p class="sme-step__title">Reconcile and Revise</p>
+                <div class="sme-step__body">
+                  <p>After all three reviews are complete, I reconcile the feedback. Not all of it will be compatible — a clinical SME may push for scenario language that a compliance SME finds too ambiguous for a training context. My job is to find the version that is both clinically realistic and compliance-accurate, and to document the reasoning behind every revision.</p>
+                  <p>A revision log throughout demonstrates rigor, supports future updates, and protects the designer professionally if the content is ever questioned after deployment.</p>
+                </div>
+              </div>
+            </div>
+            <div class="sme-step">
+              <span class="sme-step__num">4</span>
+              <div>
+                <p class="sme-step__title">Final Sign-Off</p>
+                <div class="sme-step__body">
+                  <p>Written confirmation from each SME that the content within their domain is accurate and appropriate for deployment. An email is enough. What matters is that it is dated and retained with the project documentation.</p>
+                  <p>If you are building this as a portfolio piece and a formal review is not feasible, document the process you would follow for a live deployment and be transparent about the context. That kind of honesty reads well to hiring managers in healthcare tech — it shows you understand the stakes of the work even when the current project is a demonstration.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-section" id="sme-signal">
+          <span class="sec-eyebrow">Design Intent</span>
+          <h2 class="sec-h2">What This Process Signals</h2>
+          <div class="sme-callout">
+            <p>Most instructional designers building healthcare compliance training engage a subject matter expert, collect feedback, and revise. That works for low-stakes content. For training that directly shapes how clinical staff interact with AI tools in patient care settings, it is not enough.</p>
+            <p>A three-party review with distinct roles, structured guidance, and documented sign-off signals something specific: that I understand the difference between instructionally sound and clinically safe, and that I know how to close that gap through structured collaboration.</p>
+          </div>
+          <p style="font-size:12px;color:var(--ink2);margin-top:20px;">Document prepared May 2026 · Trust But Verify: Using AI Safely in Clinical Settings · Vanessa Schill, ATD Master Trainer</p>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ── Case Navigation ── -->
+  <nav class="case-nav" aria-label="Case study navigation">
+    <div class="case-nav__inner">
+      <a href="/work" class="case-nav__back">← All work</a>
+      <a href="/work/improving-training-videos" class="case-nav__next">Training Video Adoption →</a>
+    </div>
+  </nav>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <span class="footer__copy">© 2026 Vanessa Schill</span>
+    <ul class="footer__links">
+      <li><a href="https://linkedin.com/in/vanessaschill" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="/assets/vanessa-schill-resume.pdf" target="_blank" rel="noopener">Resume</a></li>
+      <li><a href="/work">Work</a></li>
+      <li><a href="/articles">Articles</a></li>
+    </ul>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script>
+    const tabBtns   = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+    const tabsEl    = document.querySelector('.case-tabs');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.tab;
+        tabBtns.forEach(b => b.setAttribute('aria-selected', 'false'));
+        tabPanels.forEach(p => p.classList.remove('active'));
+        btn.setAttribute('aria-selected', 'true');
+        document.getElementById('tab-' + target).classList.add('active');
+        window.scrollTo({ top: tabsEl.offsetTop - 10, behavior: 'smooth' });
+        const url = new URL(window.location);
+        url.searchParams.set('tab', target);
+        history.replaceState(null, '', url);
+      });
+    });
+
+    // Deep-link: ?tab=module-content, ?tab=sources, ?tab=sme-review
+    const deepTab = new URLSearchParams(window.location.search).get('tab');
+    if (deepTab) {
+      const btn = document.querySelector(`[data-tab="${deepTab}"]`);
+      if (btn) btn.click();
+    }
+  </script>
+</body>
+</html>
