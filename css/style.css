@@ -4,7 +4,9 @@
             Ice Blue / Signal Yellow
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap');
+/* Fonts are loaded via <link rel="preconnect"> + <link rel="stylesheet">
+   in each page's <head> (not @import here) so they fetch in parallel
+   with this stylesheet instead of waiting for it to parse first. */
 
 /* ── Variables ───────────────────────────────────────────────── */
 :root {
