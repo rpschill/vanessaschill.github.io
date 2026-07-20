@@ -855,26 +855,10 @@ sup {
 
 /* ── Homepage: CTA band ──────────────────────────────────────── */
 .home-cta {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
   border-top: 0.5px solid var(--rule-md);
 }
 .home-cta__left {
   padding: 72px var(--pad-x);
-  border-right: 0.5px solid var(--rule-md);
-}
-.home-cta__right {
-  display: flex;
-  align-items: flex-end;
-  justify-content: end;
-}
-
-.home-cta__photo {
-  width: 100%;
-  max-width: 420px;
-  height: auto;
-  display: block;
-  object-fit: cover;
 }
 
 .home-cta__kicker {
@@ -901,10 +885,6 @@ sup {
   gap: 24px; flex-wrap: wrap;
 }
 
-@media (max-width: 900px) {
-  .home-cta { grid-template-columns: 1fr; }
-  .home-cta__left { border-right: none; }
-}
 
 /* ── Contact detail list ─────────────────────────────────────── */
 .contact-details {
@@ -966,6 +946,14 @@ sup {
 
 /* ── Article body: strong ────────────────────────────────────── */
 .article-body strong { font-weight: 500; color: var(--ink); }
+
+/* ── About page portrait ─────────────────────────────────────── */
+.article-body .about-photo {
+  float: right;
+  width: clamp(160px, 40%, 300px);
+  margin: 6px 0 24px 32px;
+  border-radius: var(--radius);
+}
 
 /* ── Article figure ──────────────────────────────────────────── */
 .article-figure {
