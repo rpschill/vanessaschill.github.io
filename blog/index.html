@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page not found — Vanessa Schill</title>
+  <meta name="description" content="Blog posts on instructional design, learning science, and training by Vanessa Schill.">
+  <title>Blog — Vanessa Schill</title>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap">
@@ -22,13 +24,13 @@
 
   <div class="accent-bar"></div>
 
-    <header>
+  <header>
     <nav class="nav" aria-label="Main navigation">
       <a href="/" class="nav__logo">Vanessa Schill</a>
       <ul class="nav__links">
         <li><a href="/instructional-design">Instructional Design</a></li>
         <li><a href="/#skills">Skills</a></li>
-        <li><a href="/blog">Blog</a></li>
+        <li><a href="/blog" aria-current="page">Blog</a></li>
         <li><a href="/writing">Writing</a></li>
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
@@ -41,32 +43,50 @@
     <nav class="nav__mobile-menu" aria-label="Mobile navigation">
       <a href="/instructional-design">Instructional Design</a>
       <a href="/#skills">Skills</a>
-      <a href="/blog">Blog</a>
+      <a href="/blog" aria-current="page">Blog</a>
       <a href="/writing">Writing</a>
       <a href="/about">About</a>
       <a href="/contact">Contact</a>
       <a href="/assets/vanessa-schill-resume.pdf" class="nav__cta" target="_blank" rel="noopener">Resume ↓</a>
     </nav>
   </header>
+
   <main>
-    <div class="not-found">
-      <p class="not-found__num">404</p>
-      <h1 class="not-found__title">Page not found.</h1>
-      <p class="not-found__body">The page you're looking for doesn't exist or may have moved.</p>
-      <a href="/" class="btn btn--primary">Back to home</a>
+
+    <div class="page-hero">
+      <p class="page-hero__kicker">Blog</p>
+      <h1 class="page-hero__title">Ideas on learning,<br><em>design, and craft.</em></h1>
+      <p class="page-hero__body">Thoughts on instructional design methodology, the learning sciences, and what it takes to build training that actually works.</p>
     </div>
+
+    <div class="article-grid">
+      <a href="/blog/case-for-the-manual" class="article-card">
+        <span class="article-card__date">July 2026</span>
+        <h2 class="article-card__title">L&amp;D: The Case for the Manual (Yes, Even in 2026)</h2>
+        <p class="article-card__excerpt">A battered three-ring binder in an MRI hallway got me thinking about what happens when a video is the only training people get. Job aids and reference documentation still matter — and when we don't build them, learners quietly build a worse version themselves.</p>
+        <span class="article-card__link">Read article →</span>
+      </a>
+      <a href="/blog/before-you-build" class="article-card">
+        <span class="article-card__date">March 2026</span>
+        <h2 class="article-card__title">Before You Build: The Step Most Teams Skip (and Why It Matters)</h2>
+        <p class="article-card__excerpt">I think of every training request like hiking: the endpoint is set by stakeholders, the compass gives us direction, and the terrain determines the path. Our job as instructional designers is to survey that terrain before we take a single step.</p>
+        <span class="article-card__link">Read article →</span>
+      </a>
+    </div>
+
   </main>
+
   <footer class="footer">
     <span class="footer__copy">© 2026 Vanessa Schill</span>
     <ul class="footer__links">
       <li><a href="https://linkedin.com/in/vanessaschill" target="_blank" rel="noopener">LinkedIn</a></li>
       <li><a href="/assets/vanessa-schill-resume.pdf" target="_blank" rel="noopener">Resume</a></li>
       <li><a href="/instructional-design">Instructional Design</a></li>
-      <li><a href="/blog">Blog</a></li>
       <li><a href="/writing">Writing</a></li>
       <li><a href="/about">About</a></li>
     </ul>
   </footer>
+
   <script src="/js/main.js"></script>
 </body>
 </html>
