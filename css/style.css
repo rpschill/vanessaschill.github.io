@@ -12,11 +12,10 @@
 :root {
   --ink:       rgb(15, 32, 64);
   --ink2:      rgb(90, 105, 120);
-  --ink3:      rgb(150, 163, 175);
   --bg:        rgb(230, 233, 237);
   --bg2:       rgb(165, 195, 225);
   --accent:    rgb(255, 204, 0);
-  --accent-dk: rgb(155, 120, 0);
+  --accent-dk: rgb(120, 93, 0);
   --white:     #ffffff;
   --rule:      rgba(15, 32, 64, 0.10);
   --rule-md:   rgba(15, 32, 64, 0.20);
@@ -46,6 +45,25 @@ a { color: inherit; text-decoration: none; }
 .visually-hidden {
   position: absolute; width: 1px; height: 1px;
   overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
+}
+
+/* ── Skip link ───────────────────────────────────────────────── */
+.skip-link {
+  position: absolute;
+  top: -100px; left: 12px;
+  z-index: 1000;
+  background: var(--accent);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 13px; font-weight: 500;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  transition: top 0.15s;
+}
+.skip-link:focus {
+  top: 12px;
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
 }
 
 /* ── Superscript ─────────────────────────────────────────────── */
@@ -266,7 +284,7 @@ sup {
 }
 .testi__author { display: flex; flex-direction: column; gap: 3px; padding-top: 16px; border-top: 0.5px solid var(--rule); }
 .testi__name { font-size: 13px; font-weight: 500; color: var(--ink); }
-.testi__role { font-size: 11px; color: var(--ink3); }
+.testi__role { font-size: 11px; color: var(--ink2); }
 
 /* ── Grid divider label ──────────────────────────────────────── */
 .grid-divider {
@@ -624,11 +642,14 @@ sup {
   border-radius: var(--radius);
   background: var(--white);
   color: var(--ink);
-  transition: border-color 0.15s;
-  outline: none;
+  transition: border-color 0.15s, outline-offset 0.15s;
 }
 .form-field input:focus,
-.form-field textarea:focus { border-color: var(--ink); }
+.form-field textarea:focus {
+  border-color: var(--ink);
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
 .form-field textarea { resize: vertical; min-height: 120px; }
 .form-message {
   font-size: 13px; font-weight: 500;
@@ -654,7 +675,7 @@ sup {
   border-top: 0.5px solid var(--rule-md);
   background: var(--white);
 }
-.footer__copy { font-size: 11px; color: var(--ink3); }
+.footer__copy { font-size: 11px; color: var(--ink2); }
 .footer__links { display: flex; gap: 28px; list-style: none; }
 .footer__links a {
   font-size: 11px; font-weight: 500;
@@ -939,7 +960,7 @@ sup {
 .contact-detail__label {
   font-size: 10px; font-weight: 500;
   letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--ink3);
+  color: var(--ink2);
 }
 .contact-detail__value {
   font-size: 14px;
@@ -1005,7 +1026,7 @@ sup {
 }
 .article-figure figcaption {
   font-size: 11px;
-  color: var(--ink3);
+  color: var(--ink2);
   margin-top: 8px;
 }
 
