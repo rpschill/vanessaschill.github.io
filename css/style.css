@@ -262,17 +262,33 @@ sup {
   letter-spacing: 0.03em;
 }
 
-/* ── Testimonial ─────────────────────────────────────────────── */
-.testi-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5px;
+/* ── Testimonial marquee ─────────────────────────────────────── */
+.testi-marquee {
+  overflow: hidden;
+  border-top: 0.5px solid var(--rule-md);
   background: var(--rule-md);
+}
+.testi-track {
+  display: flex;
+  width: max-content;
+  animation: testi-scroll 75s linear infinite;
+}
+.testi-marquee:hover .testi-track,
+.testi-marquee:focus-within .testi-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .testi-track { animation: none; }
+}
+@keyframes testi-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 .testi {
   background: var(--white);
+  width: 360px;
+  flex-shrink: 0;
   padding: 36px 32px;
   display: flex; flex-direction: column; gap: 18px;
+  border-right: 0.5px solid var(--rule-md);
 }
 .testi__accent { width: 28px; height: 3px; background: var(--accent); flex-shrink: 0; }
 .testi__quote {
@@ -692,7 +708,6 @@ sup {
   .nav__hamburger { display: flex; }
 
   .proj-grid { grid-template-columns: repeat(2, 1fr); }
-  .testi-grid { grid-template-columns: 1fr; }
   .skills-grid { grid-template-columns: 1fr; }
   .article-grid { grid-template-columns: 1fr; }
   .case-hero { grid-template-columns: 1fr; }
@@ -707,6 +722,7 @@ sup {
   .proj-grid { grid-template-columns: 1fr; }
   .clients__item { flex: 1 1 50%; }
   .footer { flex-direction: column; gap: 16px; text-align: center; }
+  .testi { width: 280px; padding: 28px 24px; }
 }
 
 /* ── Homepage: Hero ──────────────────────────────────────────── */
