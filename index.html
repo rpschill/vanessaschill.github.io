@@ -34,9 +34,9 @@
       </div>
       <ul class="nav__links">
         <li><a href="/instructional-design">Instructional Design</a></li>
-        <li><a href="/#skills">Skills</a></li>
+        <li><a href="/writing">Writing/Comm</a></li>
         <li><a href="/blog">Blog</a></li>
-        <li><a href="/writing">Writing</a></li>
+        <li><a href="/#skills">Skills</a></li>
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
       </ul>
@@ -47,9 +47,9 @@
     </nav>
     <nav class="nav__mobile-menu" aria-label="Mobile navigation">
       <a href="/instructional-design">Instructional Design</a>
-      <a href="/#skills">Skills</a>
+      <a href="/writing">Writing/Comm</a>
       <a href="/blog">Blog</a>
-      <a href="/writing">Writing</a>
+      <a href="/#skills">Skills</a>
       <a href="/about">About</a>
       <a href="/contact">Contact</a>
       <a href="/assets/vanessa-schill-resume.pdf" class="nav__cta" target="_blank" rel="noopener">Resume ↓</a>
@@ -93,7 +93,16 @@
       </div>
       <div class="hero__actions">
         <a href="/about" class="btn btn--accent">About me</a>
-        <a href="/instructional-design" class="btn btn--primary">View my work</a>
+        <div class="dropdown">
+          <button type="button" class="btn btn--primary dropdown__toggle" aria-haspopup="true" aria-expanded="false">
+            View my work
+            <span class="dropdown__caret" aria-hidden="true">▾</span>
+          </button>
+          <div class="dropdown__menu" role="menu">
+            <a href="/instructional-design" class="dropdown__item" role="menuitem">Instructional Design</a>
+            <a href="/writing" class="dropdown__item" role="menuitem">Writing</a>
+          </div>
+        </div>
         <a href="/contact" class="btn btn--outline">Get in touch</a>
       </div>
     </section>

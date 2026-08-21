@@ -33,6 +33,34 @@ if (hamburger && mobileMenu) {
   });
 }
 
+// ── Hero dropdown ────────────────────────────────────────────
+document.querySelectorAll('.dropdown').forEach(dropdown => {
+  const toggle = dropdown.querySelector('.dropdown__toggle');
+  if (!toggle) return;
+
+  const close = () => {
+    dropdown.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+  };
+
+  toggle.addEventListener('click', e => {
+    e.stopPropagation();
+    const isOpen = dropdown.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', isOpen);
+  });
+
+  document.addEventListener('click', e => {
+    if (!dropdown.contains(e.target)) close();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && dropdown.classList.contains('is-open')) {
+      close();
+      toggle.focus();
+    }
+  });
+});
+
 // ── Formspree contact form (AJAX) ────────────────────────────
 const form = document.getElementById('contact-form');
 
