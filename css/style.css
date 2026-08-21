@@ -907,6 +907,9 @@ sup {
 .featured {
   border-bottom: 0.5px solid var(--rule-md);
 }
+.instructional-design {
+  background: var(--bg);
+}
 .featured .sec-header {
   padding: 20px var(--pad-x) 18px;
 }
@@ -930,6 +933,9 @@ sup {
   letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--ink2);
   margin-bottom: 12px;
+}
+.accent-tag {
+  background-color: #ffffff;
 }
 .featured__title {
   font-family: var(--serif);
